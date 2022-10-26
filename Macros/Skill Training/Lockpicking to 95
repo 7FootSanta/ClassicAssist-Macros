@@ -1,0 +1,53 @@
+# Name: Lockpicking to 95
+# Description: Trains Lockpicking with use of tinkered boxes.
+# Author: 7 Foot Santa
+# Shard: UOTopia-Legends
+
+# Make 4 sets of Lockpicking kits
+
+# A kit consists of 20 wooden boxes made at specific Tinker skills
+#    and all the keys from boxes place on key ring
+
+# tinkering skills I use are 30, 50, 70, 100
+
+while Skill("lockpicking") < 100:
+    if Skill("lockpicking") < 36:
+        SetAlias("kit", 0x401e0916)  # 30 kit
+        SetAlias("keys", 0x401d5394) 
+    elif Skill("lockpicking") > 35 and Skill("lockpicking") < 52: 
+        SetAlias("kit", 0x401bc53e)  # 50 kit
+        SetAlias("keys", 0x40047ac6)
+    elif Skill("lockpicking") > 51 and Skill("lockpicking") < 76:
+        SetAlias("kit", 0x401bc53d)  # 70 kit
+        SetAlias("keys", 0x401bc5f8)
+    elif Skill("lockpicking") > 75:
+        SetAlias("kit", 0x401ca0d9)  # 100 kit
+        SetAlias("keys", 0x401bc5f9)
+    else: 
+        Stop()
+    
+
+    lockpick=(0x14fc)
+    box=(0x9aa)
+    ClearJournal()
+    ClearIgnoreList()
+    
+    while FindType(box, -1, "kit"):     
+        ClearJournal()
+        UseType(lockpick)
+        WaitForTarget(5000)
+        Target('found')
+        Pause(1000)
+        if InJournal("quickly yeilds", "system"):
+            IgnoreObject('found')
+        if InJournal("does not appear to be locked", "system"): 
+            IgnoreObject('found')   
+    MoveItem('keys', 'backpack')
+    ClearIgnoreList()
+    while FindType(box, -1, "kit"):
+        UseObject("keys")
+        WaitForTarget(5000)
+        Target("found")
+        Pause(500)
+        IgnoreObject('found')
+    MoveItem('keys', "kit")
